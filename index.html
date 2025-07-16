@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design System Survey</title>
+    <script src="https://unpkg.com/petite-vue"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+
+        .question {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .rating-grid {
+            display: grid;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .rating-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .rating-scale {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        select, textarea, input[type="text"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .checkbox-group {
+            display: grid;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .submit-btn {
+            background: #3498db;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #2980b9;
+        }
+
+        .submit-btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div v-scope="SurveyApp()" @vue:mounted="mounted">
+        <h1>Design System Workshop Survey</h1>
+
+        <form name="design-system-survey" method="POST" data-netlify="true" @submit="handleSubmit">
+            <input type="hidden" name="form-name" value="design-system-survey">
+
+            <!-- Question 1: Familiarity with design systems -->
+            <div class="form-group">
+                <div class="question">How familiar are you with the concept of a "design system"?</div>
+                <div class="radio-group">
+                    <div class="radio-item">
+                        <input type="radio" id="familiarity-1" name="familiarity" value="1" v-model="form.familiarity">
+                        <label for="familiarity-1">1 - Not at all familiar</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="familiarity-2" name="familiarity" value="2" v-model="form.familiarity">
+                        <label for="familiarity-2">2</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="familiarity-3" name="familiarity" value="3" v-model="form.familiarity">
+                        <label for="familiarity-3">3</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="familiarity-4" name="familiarity" value="4" v-model="form.familiarity">
+                        <label for="familiarity-4">4</label>
+                    </div>
+                    <div class="radio-item">
+                        <input type="radio" id="familiarity-5" name="familiarity" value="5" v-model="form.familiarity">
+                        <label for="familiarity-5">5 - Very familiar</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 3: Comfort level ratings -->
+            <div class="form-group">
+                <div class="question">Rate your comfort level with these topics (1 = Not at all; 5 = Very confident):</div>
+                <div class="rating-grid">
+                    <div class="rating-row">
+                        <span>Scoped CSS in components</span>
+                        <div class="rating-scale">
+                            <label v-for="i in 5" :key="i">
+                                <input type="radio" :name="'scoped-css'" :value="i" v-model="form.scopedCss">
+                                {{i}}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="rating-row">
+                        <span>Using layout primitives</span>
+                        <div class="rating-scale">
+                            <label v-for="i in 5" :key="i">
+                                <input type="radio" :name="'layout-primitives'" :value="i" v-model="form.layoutPrimitives">
+                                {{i}}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="rating-row">
+                        <span>CSS custom properties</span>
+                        <div class="rating-scale">
+                            <label v-for="i in 5" :key="i">
+                                <input type="radio" :name="'css-custom-props'" :value="i" v-model="form.cssCustomProps">
+                                {{i}}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="rating-row">
+                        <span>Building reusable components</span>
+                        <div class="rating-scale">
+                            <label v-for="i in 5" :key="i">
+                                <input type="radio" :name="'reusable-components'" :value="i" v-model="form.reusableComponents">
+                                {{i}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 4: UI building steps -->
+            <div class="form-group">
+                <div class="question">When you build a new UI element (like a button or card), what are the first 3 steps you usually take?</div>
+                <textarea name="ui-building-steps" v-model="form.uiBuildingSteps" placeholder="Describe your typical process..."></textarea>
+            </div>
+
+            <!-- Question 5: Most frustrating part -->
+            <div class="form-group">
+                <div class="question">What is the most frustrating or time-consuming part of building UIs in our current codebase?</div>
+                <textarea name="frustrating-parts" v-model="form.frustratingParts" placeholder="Share your thoughts..."></textarea>
+            </div>
+
+            <!-- Question 6: Learning interests -->
+            <div class="form-group">
+                <div class="question">Looking ahead, what are you most interested in learning about? (Select your top 2):</div>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="learn-existing" name="learning-interests" value="existing-components" v-model="form.learningInterests">
+                        <label for="learn-existing">Using existing components to build pages faster</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="learn-cube" name="learning-interests" value="cube-css" v-model="form.learningInterests">
+                        <label for="learn-cube">How our new CSS architecture (CUBE CSS) works</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="learn-process" name="learning-interests" value="design-process" v-model="form.learningInterests">
+                        <label for="learn-process">The process for designing and building a new component</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="learn-consistency" name="learning-interests" value="ui-consistency" v-model="form.learningInterests">
+                        <label for="learn-consistency">How to make our app's UI more consistent</label>
+                    </div>
+                </div>
+                <div v-if="form.learningInterests.length > 2" style="color: #e74c3c; font-size: 0.9rem; margin-top: 0.5rem;">
+                    Please select only 2 options
+                </div>
+            </div>
+
+            <!-- Question 7: Workshop hopes -->
+            <div class="form-group">
+                <div class="question">Is there anything specific you hope to get out of a workshop focused on our design system?</div>
+                <textarea name="workshop-hopes" v-model="form.workshopHopes" placeholder="Any specific topics or outcomes you're hoping for..."></textarea>
+            </div>
+
+            <!-- Hidden fields for Netlify Forms -->
+            <input type="hidden" name="scoped-css-rating" :value="form.scopedCss">
+            <input type="hidden" name="layout-primitives-rating" :value="form.layoutPrimitives">
+            <input type="hidden" name="css-custom-props-rating" :value="form.cssCustomProps">
+            <input type="hidden" name="reusable-components-rating" :value="form.reusableComponents">
+            <input type="hidden" name="learning-interests-selected" :value="form.learningInterests.join(', ')">
+
+            <button type="submit" class="submit-btn" :disabled="!isFormValid || isSubmitting">
+                {{ isSubmitting ? 'Submitting...' : 'Submit Survey' }}
+            </button>
+        </form>
+
+        <div v-if="submitted" class="success-message">
+            Thank you for your feedback! Your responses have been submitted successfully.
+        </div>
+    </div>
+
+    <script>
+        function SurveyApp() {
+            return {
+                form: {
+                    familiarity: '',
+                    cjdsUsage: '',
+                    scopedCss: '',
+                    layoutPrimitives: '',
+                    cssCustomProps: '',
+                    reusableComponents: '',
+                    uiBuildingSteps: '',
+                    frustratingParts: '',
+                    learningInterests: [],
+                    workshopHopes: ''
+                },
+                isSubmitting: false,
+                submitted: false,
+
+                get isFormValid() {
+                    return this.form.familiarity &&
+                           this.form.cjdsUsage &&
+                           this.form.scopedCss &&
+                           this.form.layoutPrimitives &&
+                           this.form.cssCustomProps &&
+                           this.form.reusableComponents &&
+                           this.form.learningInterests.length <= 2 &&
+                           this.form.learningInterests.length > 0;
+                },
+
+                handleSubmit(e) {
+                    if (this.form.learningInterests.length > 2) {
+                        e.preventDefault();
+                        return;
+                    }
+
+                    this.isSubmitting = true;
+                    // Let the form submit naturally to Netlify
+                    setTimeout(() => {
+                        this.submitted = true;
+                        this.isSubmitting = false;
+                    }, 1000);
+                },
+
+                mounted() {
+                    console.log('Survey app mounted');
+                }
+            }
+        }
+
+        PetiteVue.createApp().mount();
+    </script>
+</body>
+</html>
