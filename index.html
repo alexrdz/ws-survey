@@ -41,10 +41,19 @@
         gap: 0.5rem;
     }
 
+    .rating-question {
+        display: flex;
+        gap: 1rem;
+
+        > :first-child {
+          flex-basis: 60%;
+        }
+    }
+
     .rating-grid {
         display: grid;
         gap: 1rem;
-        margin: 1rem 0;
+        margin: 0;
     }
 
     .rating-row {
@@ -59,6 +68,9 @@
         gap: 0.5rem;
     }
 
+    .rating-group { display: flex; gap: 1rem;}
+    .rating-group > label { display: flex; align-items: center; gap: 0.5rem;}
+
     select, textarea, input[type="text"] {
         width: 100%;
         padding: 0.75rem;
@@ -70,6 +82,7 @@
     textarea {
         min-height: 100px;
         resize: vertical;
+        max-inline-size: 90%;
     }
 
     .checkbox-group {
@@ -131,8 +144,9 @@
     </div>
 
     <!-- Q2: Comfort levels -->
-    <div class="form-group">
-      <div class="question">Rate your comfort level with these topics (1 = Not at all; 5 = Very confident):</div>
+    <div class="form-group rating-question">
+      <div class="question">Rate your comfort level with these topics <br> (1 = Not at all; 5 = Very confident):</div>
+      <div class="rating-grid">
       <div>
         <div>Scoped CSS in components</div>
         <div class="rating-group">
@@ -173,6 +187,7 @@
           <label><input type="radio" name="reusable-components" value="5">5</label>
         </div>
       </div>
+      </div>
     </div>
 
     <!-- Q3: UI building steps -->
@@ -205,7 +220,7 @@
       <textarea name="workshop-hopes"></textarea>
     </div>
 
-    <button type="submit">Submit Survey</button>
+    <button class="submit-btn" type="submit">Submit Survey</button>
   </form>
 </body>
 </html>
