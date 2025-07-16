@@ -271,12 +271,12 @@
 
                 get isFormValid() {
                     return this.form.familiarity &&
-                           this.form.scopedCss &&
-                           this.form.layoutPrimitives &&
-                           this.form.cssCustomProps &&
-                           this.form.reusableComponents &&
-                           this.form.learningInterests.length <= 2 &&
-                           this.form.learningInterests.length > 0;
+                          this.form.scopedCss &&
+                          this.form.layoutPrimitives &&
+                          this.form.cssCustomProps &&
+                          this.form.reusableComponents &&
+                          this.form.learningInterests.length <= 2 &&
+                          this.form.learningInterests.length > 0;
                 },
 
                 handleSubmit(e) {
@@ -291,6 +291,14 @@
                         this.submitted = true;
                         this.isSubmitting = false;
                     }, 1000);
+
+                    fetch("/", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                        body: new URLSearchParams(this.form).toString()
+                    })
+                        .then(() => console.log("Form successfully submitted"))
+                        .catch(error => alert(error));
                 },
 
                 mounted() {
